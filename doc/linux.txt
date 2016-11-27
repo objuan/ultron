@@ -1,0 +1,8 @@
+SAMBA 
+
+sudo apt-get install samba
+sudo smbpasswd -a <username>
+
+ ARDUINO
+
+sudo apt-get install arduino arduino-core
