@@ -14,61 +14,77 @@ static const char GETINTERACTIONS[] = "rocon_interaction_msgs/GetInteractions";
   class GetInteractionsRequest : public ros::Msg
   {
     public:
-      uint8_t roles_length;
-      char* st_roles;
-      char* * roles;
-      const char* uri;
+      uint32_t groups_length;
+      typedef char* _groups_type;
+      _groups_type st_groups;
+      _groups_type * groups;
+      typedef const char* _uri_type;
+      _uri_type uri;
+      typedef bool _runtime_pairing_requirements_type;
+      _runtime_pairing_requirements_type runtime_pairing_requirements;
 
     GetInteractionsRequest():
-      roles_length(0), roles(NULL),
-      uri("")
+      groups_length(0), groups(NULL),
+      uri(""),
+      runtime_pairing_requirements(0)
     {
     }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      *(outbuffer + offset++) = roles_length;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      for( uint8_t i = 0; i < roles_length; i++){
-      uint32_t length_rolesi = strlen(this->roles[i]);
-      memcpy(outbuffer + offset, &length_rolesi, sizeof(uint32_t));
+      *(outbuffer + offset + 0) = (this->groups_length >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 1) = (this->groups_length >> (8 * 1)) & 0xFF;
+      *(outbuffer + offset + 2) = (this->groups_length >> (8 * 2)) & 0xFF;
+      *(outbuffer + offset + 3) = (this->groups_length >> (8 * 3)) & 0xFF;
+      offset += sizeof(this->groups_length);
+      for( uint32_t i = 0; i < groups_length; i++){
+      uint32_t length_groupsi = strlen(this->groups[i]);
+      varToArr(outbuffer + offset, length_groupsi);
       offset += 4;
-      memcpy(outbuffer + offset, this->roles[i], length_rolesi);
-      offset += length_rolesi;
+      memcpy(outbuffer + offset, this->groups[i], length_groupsi);
+      offset += length_groupsi;
       }
       uint32_t length_uri = strlen(this->uri);
-      memcpy(outbuffer + offset, &length_uri, sizeof(uint32_t));
+      varToArr(outbuffer + offset, length_uri);
       offset += 4;
       memcpy(outbuffer + offset, this->uri, length_uri);
       offset += length_uri;
+      union {
+        bool real;
+        uint8_t base;
+      } u_runtime_pairing_requirements;
+      u_runtime_pairing_requirements.real = this->runtime_pairing_requirements;
+      *(outbuffer + offset + 0) = (u_runtime_pairing_requirements.base >> (8 * 0)) & 0xFF;
+      offset += sizeof(this->runtime_pairing_requirements);
       return offset;
     }
 
     virtual int deserialize(unsigned char *inbuffer)
     {
       int offset = 0;
-      uint8_t roles_lengthT = *(inbuffer + offset++);
-      if(roles_lengthT > roles_length)
-        this->roles = (char**)realloc(this->roles, roles_lengthT * sizeof(char*));
-      offset += 3;
-      roles_length = roles_lengthT;
-      for( uint8_t i = 0; i < roles_length; i++){
-      uint32_t length_st_roles;
-      memcpy(&length_st_roles, (inbuffer + offset), sizeof(uint32_t));
+      uint32_t groups_lengthT = ((uint32_t) (*(inbuffer + offset))); 
+      groups_lengthT |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1); 
+      groups_lengthT |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2); 
+      groups_lengthT |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3); 
+      offset += sizeof(this->groups_length);
+      if(groups_lengthT > groups_length)
+        this->groups = (char**)realloc(this->groups, groups_lengthT * sizeof(char*));
+      groups_length = groups_lengthT;
+      for( uint32_t i = 0; i < groups_length; i++){
+      uint32_t length_st_groups;
+      arrToVar(length_st_groups, (inbuffer + offset));
       offset += 4;
-      for(unsigned int k= offset; k< offset+length_st_roles; ++k){
+      for(unsigned int k= offset; k< offset+length_st_groups; ++k){
           inbuffer[k-1]=inbuffer[k];
       }
-      inbuffer[offset+length_st_roles-1]=0;
-      this->st_roles = (char *)(inbuffer + offset-1);
-      offset += length_st_roles;
-        memcpy( &(this->roles[i]), &(this->st_roles), sizeof(char*));
+      inbuffer[offset+length_st_groups-1]=0;
+      this->st_groups = (char *)(inbuffer + offset-1);
+      offset += length_st_groups;
+        memcpy( &(this->groups[i]), &(this->st_groups), sizeof(char*));
       }
       uint32_t length_uri;
-      memcpy(&length_uri, (inbuffer + offset), sizeof(uint32_t));
+      arrToVar(length_uri, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_uri; ++k){
           inbuffer[k-1]=inbuffer[k];
@@ -76,20 +92,29 @@ static const char GETINTERACTIONS[] = "rocon_interaction_msgs/GetInteractions";
       inbuffer[offset+length_uri-1]=0;
       this->uri = (char *)(inbuffer + offset-1);
       offset += length_uri;
+      union {
+        bool real;
+        uint8_t base;
+      } u_runtime_pairing_requirements;
+      u_runtime_pairing_requirements.base = 0;
+      u_runtime_pairing_requirements.base |= ((uint8_t) (*(inbuffer + offset + 0))) << (8 * 0);
+      this->runtime_pairing_requirements = u_runtime_pairing_requirements.real;
+      offset += sizeof(this->runtime_pairing_requirements);
      return offset;
     }
 
     const char * getType(){ return GETINTERACTIONS; };
-    const char * getMD5(){ return "7729678b2d98f5eb8e7358aaf9d23bcb"; };
+    const char * getMD5(){ return "c6009efeb3aefbb011e98b70f91471a0"; };
 
   };
 
   class GetInteractionsResponse : public ros::Msg
   {
     public:
-      uint8_t interactions_length;
-      rocon_interaction_msgs::Interaction st_interactions;
-      rocon_interaction_msgs::Interaction * interactions;
+      uint32_t interactions_length;
+      typedef rocon_interaction_msgs::Interaction _interactions_type;
+      _interactions_type st_interactions;
+      _interactions_type * interactions;
 
     GetInteractionsResponse():
       interactions_length(0), interactions(NULL)
@@ -99,11 +124,12 @@ static const char GETINTERACTIONS[] = "rocon_interaction_msgs/GetInteractions";
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
-      *(outbuffer + offset++) = interactions_length;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      *(outbuffer + offset++) = 0;
-      for( uint8_t i = 0; i < interactions_length; i++){
+      *(outbuffer + offset + 0) = (this->interactions_length >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 1) = (this->interactions_length >> (8 * 1)) & 0xFF;
+      *(outbuffer + offset + 2) = (this->interactions_length >> (8 * 2)) & 0xFF;
+      *(outbuffer + offset + 3) = (this->interactions_length >> (8 * 3)) & 0xFF;
+      offset += sizeof(this->interactions_length);
+      for( uint32_t i = 0; i < interactions_length; i++){
       offset += this->interactions[i].serialize(outbuffer + offset);
       }
       return offset;
@@ -112,12 +138,15 @@ static const char GETINTERACTIONS[] = "rocon_interaction_msgs/GetInteractions";
     virtual int deserialize(unsigned char *inbuffer)
     {
       int offset = 0;
-      uint8_t interactions_lengthT = *(inbuffer + offset++);
+      uint32_t interactions_lengthT = ((uint32_t) (*(inbuffer + offset))); 
+      interactions_lengthT |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1); 
+      interactions_lengthT |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2); 
+      interactions_lengthT |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3); 
+      offset += sizeof(this->interactions_length);
       if(interactions_lengthT > interactions_length)
         this->interactions = (rocon_interaction_msgs::Interaction*)realloc(this->interactions, interactions_lengthT * sizeof(rocon_interaction_msgs::Interaction));
-      offset += 3;
       interactions_length = interactions_lengthT;
-      for( uint8_t i = 0; i < interactions_length; i++){
+      for( uint32_t i = 0; i < interactions_length; i++){
       offset += this->st_interactions.deserialize(inbuffer + offset);
         memcpy( &(this->interactions[i]), &(this->st_interactions), sizeof(rocon_interaction_msgs::Interaction));
       }
@@ -125,7 +154,7 @@ static const char GETINTERACTIONS[] = "rocon_interaction_msgs/GetInteractions";
     }
 
     const char * getType(){ return GETINTERACTIONS; };
-    const char * getMD5(){ return "b53200c67a1f2b4ced2b8771b7d14a13"; };
+    const char * getMD5(){ return "e03e40b65375af79b812435c6a579126"; };
 
   };
 

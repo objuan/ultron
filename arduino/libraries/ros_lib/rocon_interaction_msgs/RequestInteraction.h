@@ -13,8 +13,10 @@ static const char REQUESTINTERACTION[] = "rocon_interaction_msgs/RequestInteract
   class RequestInteractionRequest : public ros::Msg
   {
     public:
-      const char* remocon;
-      int32_t hash;
+      typedef const char* _remocon_type;
+      _remocon_type remocon;
+      typedef int32_t _hash_type;
+      _hash_type hash;
 
     RequestInteractionRequest():
       remocon(""),
@@ -26,7 +28,7 @@ static const char REQUESTINTERACTION[] = "rocon_interaction_msgs/RequestInteract
     {
       int offset = 0;
       uint32_t length_remocon = strlen(this->remocon);
-      memcpy(outbuffer + offset, &length_remocon, sizeof(uint32_t));
+      varToArr(outbuffer + offset, length_remocon);
       offset += 4;
       memcpy(outbuffer + offset, this->remocon, length_remocon);
       offset += length_remocon;
@@ -47,7 +49,7 @@ static const char REQUESTINTERACTION[] = "rocon_interaction_msgs/RequestInteract
     {
       int offset = 0;
       uint32_t length_remocon;
-      memcpy(&length_remocon, (inbuffer + offset), sizeof(uint32_t));
+      arrToVar(length_remocon, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_remocon; ++k){
           inbuffer[k-1]=inbuffer[k];
@@ -77,13 +79,13 @@ static const char REQUESTINTERACTION[] = "rocon_interaction_msgs/RequestInteract
   class RequestInteractionResponse : public ros::Msg
   {
     public:
-      bool result;
-      int8_t error_code;
-      const char* message;
+      typedef int8_t _result_type;
+      _result_type result;
+      typedef const char* _message_type;
+      _message_type message;
 
     RequestInteractionResponse():
       result(0),
-      error_code(0),
       message("")
     {
     }
@@ -92,21 +94,14 @@ static const char REQUESTINTERACTION[] = "rocon_interaction_msgs/RequestInteract
     {
       int offset = 0;
       union {
-        bool real;
+        int8_t real;
         uint8_t base;
       } u_result;
       u_result.real = this->result;
       *(outbuffer + offset + 0) = (u_result.base >> (8 * 0)) & 0xFF;
       offset += sizeof(this->result);
-      union {
-        int8_t real;
-        uint8_t base;
-      } u_error_code;
-      u_error_code.real = this->error_code;
-      *(outbuffer + offset + 0) = (u_error_code.base >> (8 * 0)) & 0xFF;
-      offset += sizeof(this->error_code);
       uint32_t length_message = strlen(this->message);
-      memcpy(outbuffer + offset, &length_message, sizeof(uint32_t));
+      varToArr(outbuffer + offset, length_message);
       offset += 4;
       memcpy(outbuffer + offset, this->message, length_message);
       offset += length_message;
@@ -117,23 +112,15 @@ static const char REQUESTINTERACTION[] = "rocon_interaction_msgs/RequestInteract
     {
       int offset = 0;
       union {
-        bool real;
+        int8_t real;
         uint8_t base;
       } u_result;
       u_result.base = 0;
       u_result.base |= ((uint8_t) (*(inbuffer + offset + 0))) << (8 * 0);
       this->result = u_result.real;
       offset += sizeof(this->result);
-      union {
-        int8_t real;
-        uint8_t base;
-      } u_error_code;
-      u_error_code.base = 0;
-      u_error_code.base |= ((uint8_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      this->error_code = u_error_code.real;
-      offset += sizeof(this->error_code);
       uint32_t length_message;
-      memcpy(&length_message, (inbuffer + offset), sizeof(uint32_t));
+      arrToVar(length_message, (inbuffer + offset));
       offset += 4;
       for(unsigned int k= offset; k< offset+length_message; ++k){
           inbuffer[k-1]=inbuffer[k];
@@ -145,7 +132,7 @@ static const char REQUESTINTERACTION[] = "rocon_interaction_msgs/RequestInteract
     }
 
     const char * getType(){ return REQUESTINTERACTION; };
-    const char * getMD5(){ return "59c96bfec0e66f629d852df5b53676e1"; };
+    const char * getMD5(){ return "0ff98cb6c30c3d7d7a4c770ea066f2fd"; };
 
   };
 

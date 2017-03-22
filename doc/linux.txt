@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 SAMBA 
 
 sudo apt-get install samba
@@ -6,3 +7,15 @@ sudo smbpasswd -a <username>
  ARDUINO
 
 sudo apt-get install arduino arduino-core
+=======
+SAMBA 
+
+sudo apt-get install samba
+sudo smbpasswd -a <username>
+
+USB
+
+
+
+
+>>>>>>> Stashed changes

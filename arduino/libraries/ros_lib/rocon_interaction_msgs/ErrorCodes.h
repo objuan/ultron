@@ -15,12 +15,22 @@ namespace rocon_interaction_msgs
       enum { SUCCESS =  0 };
       enum { INTERACTION_UNAVAILABLE =  20     };
       enum { INTERACTION_QUOTA_REACHED =  21   };
-      enum { START_PAIRED_RAPP_FAILED =  31    };
-      enum { ALREADY_PAIRING =  32    };
-      enum { MSG_INTERACTION_UNAVAILABLE =  "This role-app pair is not available for use." };
+      enum { PAIRING_UNAVAILABLE =  30 };
+      enum { START_PAIRING_FAILED =  31 };
+      enum { ALREADY_PAIRING =  32 };
+      enum { REQUIRED_RAPP_IS_NOT_RUNNING =  33 };
+      enum { DIFFERENT_RAPP_IS_RUNNING =  34 };
+      enum { NOT_PAIRING =  35 };
+      enum { STOP_PAIRING_FAILED =  36 };
+      enum { MSG_INTERACTION_UNAVAILABLE =  "This interaction is not available for use." };
+      enum { MSG_PAIRING_UNAVAILABLE =  "The specified pairing does not exist." };
       enum { MSG_INTERACTION_QUOTA_REACHED =  "More connections of this type not permitted." };
-      enum { MSG_START_PAIRED_RAPP_FAILED =  "Failed to start the paired rapp." };
+      enum { MSG_REQUIRED_RAPP_IS_NOT_RUNNING =  "No rapp is running and this pairing interaction requires one to be." };
+      enum { MSG_DIFFERENT_RAPP_IS_RUNNING =  "A different rapp to that required is already running." };
+      enum { MSG_START_PAIRING_FAILED =  "Failed to start the pairing (rapp)." };
+      enum { MSG_STOP_PAIRING_FAILED =  "Failed to stop a pairing (rapp)" };
       enum { MSG_ALREADY_PAIRING =  "Already pairing, cannot start another pairing." };
+      enum { MSG_NOT_PAIRING =  "This interaction manager is not managing paired interactions." };
 
     ErrorCodes()
     {
@@ -39,7 +49,7 @@ namespace rocon_interaction_msgs
     }
 
     const char * getType(){ return "rocon_interaction_msgs/ErrorCodes"; };
-    const char * getMD5(){ return "5137814d1764e0f595e2a0aeb307c101"; };
+    const char * getMD5(){ return "07ff328fec8e7125b6dba36ae1479350"; };
 
   };
 

@@ -14,7 +14,8 @@ static const char GETINTERACTION[] = "rocon_interaction_msgs/GetInteraction";
   class GetInteractionRequest : public ros::Msg
   {
     public:
-      int32_t hash;
+      typedef int32_t _hash_type;
+      _hash_type hash;
 
     GetInteractionRequest():
       hash(0)
@@ -62,8 +63,10 @@ static const char GETINTERACTION[] = "rocon_interaction_msgs/GetInteraction";
   class GetInteractionResponse : public ros::Msg
   {
     public:
-      bool result;
-      rocon_interaction_msgs::Interaction interaction;
+      typedef bool _result_type;
+      _result_type result;
+      typedef rocon_interaction_msgs::Interaction _interaction_type;
+      _interaction_type interaction;
 
     GetInteractionResponse():
       result(0),
@@ -101,7 +104,7 @@ static const char GETINTERACTION[] = "rocon_interaction_msgs/GetInteraction";
     }
 
     const char * getType(){ return GETINTERACTION; };
-    const char * getMD5(){ return "abffed0d9b7b8b5c3540f9e86db39f52"; };
+    const char * getMD5(){ return "791b2d4e984d3bc84277d856a387a4ac"; };
 
   };
 
